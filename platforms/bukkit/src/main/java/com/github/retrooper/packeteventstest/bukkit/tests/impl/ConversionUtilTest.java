@@ -54,7 +54,6 @@ public class ConversionUtilTest implements Tests {
 
     private void itemStackTests() {
         ItemStack bukkitItemStack = new ItemStack(Material.DIAMOND_SWORD, 1);
-        ItemStack sad = new ItemStack(Material.SADDLE, 1);
         com.github.retrooper.packetevents.protocol.item.ItemStack peItemStack = SpigotConversionUtil.fromBukkitItemStack(bukkitItemStack);
         ItemStack convertedBackBukkitItemStack = SpigotConversionUtil.toBukkitItemStack(peItemStack);
 
