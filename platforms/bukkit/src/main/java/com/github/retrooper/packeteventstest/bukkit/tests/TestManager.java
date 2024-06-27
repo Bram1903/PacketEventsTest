@@ -16,24 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.retrooper.packeteventstest.bukkit;
+package com.github.retrooper.packeteventstest.bukkit.tests;
 
-import com.github.retrooper.packeteventstest.PEPlatform;
-import com.github.retrooper.packeteventstest.bukkit.tests.TestManager;
-import lombok.Getter;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.github.retrooper.packeteventstest.bukkit.tests.impl.ItemStackTest;
 
-@Getter
-public class BukkitPacketEventsTest extends PEPlatform<JavaPlugin> {
+public class TestManager {
 
-    private final JavaPlugin plugin;
-    private TestManager testManager;
-
-    public BukkitPacketEventsTest(JavaPlugin plugin) {
-        this.plugin = plugin;
-    }
-
-    protected void EnableTestManager() {
-        testManager = new TestManager();
+    public TestManager() {
+        new ItemStackTest();
     }
 }

@@ -16,24 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.retrooper.packeteventstest.bukkit;
+package com.github.retrooper.packeteventstest.bukkit.tests.impl;
 
-import com.github.retrooper.packeteventstest.PEPlatform;
-import com.github.retrooper.packeteventstest.bukkit.tests.TestManager;
-import lombok.Getter;
-import org.bukkit.plugin.java.JavaPlugin;
+import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
-@Getter
-public class BukkitPacketEventsTest extends PEPlatform<JavaPlugin> {
+public class ItemStackTest {
 
-    private final JavaPlugin plugin;
-    private TestManager testManager;
-
-    public BukkitPacketEventsTest(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public ItemStackTest() {
+        ItemStackTests();
     }
 
-    protected void EnableTestManager() {
-        testManager = new TestManager();
+    private void ItemStackTests() {
+        ItemStack bukkitItemStack = new ItemStack(Material.DIAMOND_SWORD, 1);
+        com.github.retrooper.packetevents.protocol.item.ItemStack peItemStack = SpigotConversionUtil.fromBukkitItemStack(bukkitItemStack);
+        ItemStack convertedBackBukkitItemStack = SpigotConversionUtil.toBukkitItemStack(peItemStack);
+
+        if (!bukkitItemStack.equals(convertedBackBukkitItemStack)) {
+            throw new IllegalStateException("ItemStack conversion failed!");
+        }
     }
 }

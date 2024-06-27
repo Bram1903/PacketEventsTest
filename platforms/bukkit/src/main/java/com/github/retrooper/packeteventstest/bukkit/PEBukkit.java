@@ -30,6 +30,7 @@ public class PEBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         pe.commonOnEnable();
+        pe.EnableTestManager();
     }
 
     @Override
