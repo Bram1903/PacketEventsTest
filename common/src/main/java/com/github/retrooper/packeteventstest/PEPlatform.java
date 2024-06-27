@@ -18,6 +18,8 @@
 
 package com.github.retrooper.packeteventstest;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packeteventstest.listeners.CommonPacketListener;
 import lombok.Getter;
 
 import java.util.logging.Logger;
@@ -31,6 +33,8 @@ public abstract class PEPlatform<P> {
      * Called when the platform is enabled.
      */
     public void commonOnEnable() {
+        PacketEvents.getAPI().getEventManager().registerListener(new CommonPacketListener());
+
         logger.info("PacketEventsTest has been enabled!");
     }
 
