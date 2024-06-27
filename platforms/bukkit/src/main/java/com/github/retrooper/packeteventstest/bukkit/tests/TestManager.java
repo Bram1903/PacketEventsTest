@@ -18,11 +18,23 @@
 
 package com.github.retrooper.packeteventstest.bukkit.tests;
 
-import com.github.retrooper.packeteventstest.bukkit.tests.impl.ItemStackTest;
+import com.github.retrooper.packeteventstest.bukkit.tests.impl.ConversionUtilTest;
+import com.github.retrooper.packeteventstest.interfaces.Tests;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class TestManager {
 
-    public TestManager() {
-        new ItemStackTest();
+    public TestManager(JavaPlugin plugin) {
+        registerTests(plugin);
+    }
+
+    private void registerTests(JavaPlugin plugin) {
+        Tests[] tests = {
+            new ConversionUtilTest(plugin)
+        };
+
+        for (Tests test : tests) {
+            test.init();
+        }
     }
 }

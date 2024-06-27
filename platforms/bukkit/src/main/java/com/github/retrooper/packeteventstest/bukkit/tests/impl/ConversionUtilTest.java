@@ -18,23 +18,49 @@
 
 package com.github.retrooper.packeteventstest.bukkit.tests.impl;
 
+import com.github.retrooper.packeteventstest.interfaces.Tests;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class ItemStackTest {
+public class ConversionUtilTest implements Tests {
 
-    public ItemStackTest() {
-        ItemStackTests();
+    private final JavaPlugin plugin;
+
+    public ConversionUtilTest(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
-    private void ItemStackTests() {
+    @Override
+    public void init() {
+        locationTests();
+        itemStackTests();
+    }
+
+    private void locationTests() {
+        World bukkitWorld = plugin.getServer().getWorlds().get(0);
+
+        Location bukkitLocation = new Location(bukkitWorld, 0, 0, 0);
+        com.github.retrooper.packetevents.protocol.world.Location peLocation = SpigotConversionUtil.fromBukkitLocation(bukkitLocation);
+        Location convertedBackBukkitLocation = SpigotConversionUtil.toBukkitLocation(bukkitWorld, peLocation);
+
+        if (!bukkitLocation.equals(convertedBackBukkitLocation)) {
+            throw new AssertionError("Location conversion failed!");
+        }
+    }
+
+    private void itemStackTests() {
         ItemStack bukkitItemStack = new ItemStack(Material.DIAMOND_SWORD, 1);
+        ItemStack sad = new ItemStack(Material.SADDLE, 1);
         com.github.retrooper.packetevents.protocol.item.ItemStack peItemStack = SpigotConversionUtil.fromBukkitItemStack(bukkitItemStack);
         ItemStack convertedBackBukkitItemStack = SpigotConversionUtil.toBukkitItemStack(peItemStack);
 
         if (!bukkitItemStack.equals(convertedBackBukkitItemStack)) {
-            throw new IllegalStateException("ItemStack conversion failed!");
+            throw new AssertionError("ItemStack conversion failed!");
         }
     }
 }
+
