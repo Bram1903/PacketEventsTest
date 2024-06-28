@@ -23,6 +23,9 @@ import com.github.retrooper.packeteventstest.interfaces.Tests;
 import io.github.retrooper.packetevents.util.folia.FoliaScheduler;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TestManager {
 
     public TestManager(JavaPlugin plugin) {
@@ -30,13 +33,11 @@ public class TestManager {
     }
 
     private void registerTests(JavaPlugin plugin) {
-        Tests[] tests = {
+        List<Tests> tests = Arrays.asList(
                 new ConversionUtilTest(plugin)
-        };
+        );
 
-        for (Tests test : tests) {
-            FoliaScheduler.getAsyncScheduler().runNow(plugin, (o) -> test.init());
-        }
+        tests.forEach(test -> FoliaScheduler.getAsyncScheduler().runNow(plugin, (o) -> test.init()));
     }
 }
 

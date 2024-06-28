@@ -33,26 +33,35 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ConversionUtilTest implements Tests {
 
     private final JavaPlugin plugin;
+    private final List<Runnable> tasks;
 
     public ConversionUtilTest(JavaPlugin plugin) {
         this.plugin = plugin;
+        this.tasks = Arrays.asList(
+                this::locationTests,
+                this::potionEffectTypeTests,
+                this::gameModeTests,
+                this::bukkitBlockDataTests,
+                this::entityTypeTests,
+                this::itemMaterialTests,
+                this::materialDataTests,
+                this::itemStackTests,
+                this::worldTests,
+                this::particleTests
+        );
     }
 
     @Override
     public void init() {
-        locationTests();
-        potionEffectTypeTests();
-        gameModeTests();
-        bukkitBlockDataTests();
-        entityTypeTests();
-        itemMaterialTests();
-        materialDataTests();
-        itemStackTests();
-        worldTests();
-        particleTests();
+        for (Runnable task : tasks) {
+            task.run();
+        }
     }
 
     private void locationTests() {
