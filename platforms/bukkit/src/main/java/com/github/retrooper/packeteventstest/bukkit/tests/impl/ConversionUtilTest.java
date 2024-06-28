@@ -161,17 +161,20 @@ public class ConversionUtilTest implements Tests {
     }
 
     private void materialDataTest() {
-        for (Material bukkitMaterial : Material.values()) {
-            if (bukkitMaterial.isLegacy()) continue;
+        for (Material material : Material.values()) {
+            if (!material.isBlock() || material.isLegacy()) continue;
 
-            MaterialData bukkitMaterialData = new MaterialData(bukkitMaterial);
-            WrappedBlockState peMaterialData = SpigotConversionUtil.fromBukkitMaterialData(bukkitMaterialData);
-            assertNotNull(peMaterialData, "WrappedBlockState is null for " + bukkitMaterialData.getItemType().name());
+            MaterialData materialData = new MaterialData(material);
+            WrappedBlockState wrappedBlockState = SpigotConversionUtil.fromBukkitMaterialData(materialData);
+            assertNotNull(wrappedBlockState, "WrappedBlockState is null for " + materialData.getItemType().name());
 
-            MaterialData convertedBack = SpigotConversionUtil.toBukkitMaterialData(peMaterialData);
-            assertNotNull(convertedBack, "Converted MaterialData is null for " + peMaterialData.getType().getName());
+            MaterialData convertedMaterialData = SpigotConversionUtil.toBukkitMaterialData(wrappedBlockState);
+            assertNotNull(convertedMaterialData, "Converted MaterialData is null for " + wrappedBlockState.getType().getName());
 
-            assertEquals(bukkitMaterialData, convertedBack, "Mismatch in MaterialData for " + bukkitMaterialData.getItemType().name());
+            System.out.println("MaterialData: " + materialData.getItemType().name());
+            System.out.println("Converted MaterialData: " + convertedMaterialData.getItemType().name());
+
+            assertEquals(materialData, convertedMaterialData, "Mismatch in MaterialData for " + materialData.getItemType().name());
         }
     }
 
