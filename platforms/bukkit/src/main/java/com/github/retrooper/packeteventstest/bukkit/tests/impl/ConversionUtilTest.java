@@ -78,10 +78,15 @@ public class ConversionUtilTest implements Tests {
 
     private void locationTests() {
         World bukkitWorld = plugin.getServer().getWorlds().get(0);
+        assertNotNull(bukkitWorld, "No worlds found that can be used for testing");
 
         Location bukkitLocation = new Location(bukkitWorld, 0, 0, 0);
+
         com.github.retrooper.packetevents.protocol.world.Location peLocation = SpigotConversionUtil.fromBukkitLocation(bukkitLocation);
+        assertNotNull(peLocation, "Location is null for " + bukkitLocation.getWorld().getName());
+
         Location convertedBackBukkitLocation = SpigotConversionUtil.toBukkitLocation(bukkitWorld, peLocation);
+        assertNotNull(convertedBackBukkitLocation, "Converted Location is null for " + bukkitLocation.getWorld().getName());
 
         assertEquals(bukkitLocation, convertedBackBukkitLocation, "Mismatch in Location conversion");
     }
