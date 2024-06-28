@@ -36,7 +36,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ConversionUtilTest implements Tests {
 
@@ -73,30 +73,30 @@ public class ConversionUtilTest implements Tests {
         com.github.retrooper.packetevents.protocol.world.Location peLocation = SpigotConversionUtil.fromBukkitLocation(bukkitLocation);
         Location convertedBackBukkitLocation = SpigotConversionUtil.toBukkitLocation(bukkitWorld, peLocation);
 
-        assertEquals(bukkitLocation, convertedBackBukkitLocation);
+        assertEquals(bukkitLocation, convertedBackBukkitLocation, "Mismatch in Location conversion");
     }
 
     private void potionEffectTypeTests() {
         for (PotionEffectType bukkitPotionEffectType : Registry.POTION_EFFECT_TYPE) {
             PotionType potionType = SpigotConversionUtil.fromBukkitPotionEffectType(bukkitPotionEffectType);
-            if (potionType == null) throw new AssertionError("PotionType is null for " + bukkitPotionEffectType.getKey());
+            assertNotNull(potionType, "PotionType is null for " + bukkitPotionEffectType.getKey());
 
             PotionEffectType convertedBackBukkitPotionEffectType = SpigotConversionUtil.toBukkitPotionEffectType(potionType);
-            if (convertedBackBukkitPotionEffectType == null) throw new AssertionError("PotionEffectType is null for " + potionType.getName());
+            assertNotNull(convertedBackBukkitPotionEffectType, "PotionEffectType is null for " + potionType.getName());
 
-            assertEquals(bukkitPotionEffectType, convertedBackBukkitPotionEffectType);
+            assertEquals(bukkitPotionEffectType, convertedBackBukkitPotionEffectType, "Mismatch in PotionEffectType for " + bukkitPotionEffectType.getKey());
         }
     }
 
     private void gameModeTests() {
         for (GameMode bukkitGameMode : GameMode.values()) {
             com.github.retrooper.packetevents.protocol.player.GameMode peGameMode = SpigotConversionUtil.fromBukkitGameMode(bukkitGameMode);
-            if (peGameMode == null) throw new AssertionError("GameMode is null for " + bukkitGameMode.name());
+            assertNotNull(peGameMode, "GameMode is null for " + bukkitGameMode.name());
 
             GameMode convertedBack = SpigotConversionUtil.toBukkitGameMode(peGameMode);
-            if (convertedBack == null) throw new AssertionError("GameMode is null for " + peGameMode.name());
+            assertNotNull(convertedBack, "GameMode is null for " + peGameMode.name());
 
-            assertEquals(bukkitGameMode, convertedBack);
+            assertEquals(bukkitGameMode, convertedBack, "Mismatch in GameMode for " + bukkitGameMode.name());
         }
     }
 
@@ -105,64 +105,79 @@ public class ConversionUtilTest implements Tests {
             if (!material.isBlock() || material.isLegacy()) continue;
 
             BlockData bukkitBlockData = material.createBlockData();
-            if (bukkitBlockData == null) throw new AssertionError("BlockData is null for " + material.name());
+            assertNotNull(bukkitBlockData, "BlockData is null for " + material.name());
 
             WrappedBlockState wrappedBlockState = SpigotConversionUtil.fromBukkitBlockData(bukkitBlockData);
-            if (wrappedBlockState == null) throw new AssertionError("WrappedBlockState is null for " + bukkitBlockData.getMaterial().name());
+            assertNotNull(wrappedBlockState, "WrappedBlockState is null for " + bukkitBlockData.getMaterial().name());
 
             BlockData convertedBackBukkitBlockData = SpigotConversionUtil.toBukkitBlockData(wrappedBlockState);
-            if (convertedBackBukkitBlockData == null) throw new AssertionError("BlockData is null for " + wrappedBlockState.getType().getName());
+            assertNotNull(convertedBackBukkitBlockData, "BlockData is null for " + wrappedBlockState.getType().getName());
 
-            assertEquals(bukkitBlockData, convertedBackBukkitBlockData);
+            assertEquals(bukkitBlockData, convertedBackBukkitBlockData, "Mismatch in BlockData for " + material.name());
         }
     }
 
     private void entityTypeTests() {
         EntityType bukkitEntityType = EntityType.PLAYER;
         com.github.retrooper.packetevents.protocol.entity.type.EntityType peEntityType = SpigotConversionUtil.fromBukkitEntityType(bukkitEntityType);
-        EntityType convertedBack = SpigotConversionUtil.toBukkitEntityType(peEntityType);
+        assertNotNull(peEntityType, "EntityType is null for " + bukkitEntityType.name());
 
-        assertEquals(bukkitEntityType, convertedBack);
+        EntityType convertedBack = SpigotConversionUtil.toBukkitEntityType(peEntityType);
+        assertNotNull(convertedBack, "Converted EntityType is null for " + peEntityType.getName());
+
+        assertEquals(bukkitEntityType, convertedBack, "Mismatch in EntityType for " + bukkitEntityType.name());
     }
 
     private void itemMaterialTests() {
         Material bukkitItemMaterial = Material.DIAMOND_SWORD;
         ItemType itemType = SpigotConversionUtil.fromBukkitItemMaterial(bukkitItemMaterial);
-        Material convertedBack = SpigotConversionUtil.toBukkitItemMaterial(itemType);
+        assertNotNull(itemType, "ItemType is null for " + bukkitItemMaterial.name());
 
-        assertEquals(bukkitItemMaterial, convertedBack);
+        Material convertedBack = SpigotConversionUtil.toBukkitItemMaterial(itemType);
+        assertNotNull(convertedBack, "Converted Material is null for " + itemType.getName());
+
+        assertEquals(bukkitItemMaterial, convertedBack, "Mismatch in Material for " + bukkitItemMaterial.name());
     }
 
     private void materialDataTests() {
         MaterialData bukkitMaterialData = new MaterialData(Material.DIRT);
         WrappedBlockState peMaterialData = SpigotConversionUtil.fromBukkitMaterialData(bukkitMaterialData);
-        MaterialData convertedBack = SpigotConversionUtil.toBukkitMaterialData(peMaterialData);
+        assertNotNull(peMaterialData, "WrappedBlockState is null for " + bukkitMaterialData.getItemType().name());
 
-        assertEquals(bukkitMaterialData, convertedBack);
+        MaterialData convertedBack = SpigotConversionUtil.toBukkitMaterialData(peMaterialData);
+        assertNotNull(convertedBack, "Converted MaterialData is null for " + peMaterialData.getType().getName());
+
+        assertEquals(bukkitMaterialData, convertedBack, "Mismatch in MaterialData for " + bukkitMaterialData.getItemType().name());
     }
 
     private void itemStackTests() {
         ItemStack bukkitItemStack = new ItemStack(Material.DIAMOND_SWORD, 1);
         com.github.retrooper.packetevents.protocol.item.ItemStack peItemStack = SpigotConversionUtil.fromBukkitItemStack(bukkitItemStack);
-        ItemStack convertedBackBukkitItemStack = SpigotConversionUtil.toBukkitItemStack(peItemStack);
+        assertNotNull(peItemStack, "ItemStack is null for " + bukkitItemStack.getType().name());
 
-        assertEquals(bukkitItemStack, convertedBackBukkitItemStack);
+        ItemStack convertedBackBukkitItemStack = SpigotConversionUtil.toBukkitItemStack(peItemStack);
+        assertNotNull(convertedBackBukkitItemStack, "Converted ItemStack is null for " + peItemStack.getType().getName());
+
+        assertEquals(bukkitItemStack, convertedBackBukkitItemStack, "Mismatch in ItemStack for " + bukkitItemStack.getType().name());
     }
 
     private void worldTests() {
         World bukkitWorld = plugin.getServer().getWorlds().get(0);
         Dimension dimension = SpigotConversionUtil.fromBukkitWorld(bukkitWorld);
+        assertNotNull(dimension, "Dimension is null for " + bukkitWorld.getName());
 
-        if (dimension.getDimensionName() == null || dimension.getDimensionName().isEmpty()) {
-            throw new AssertionError("World conversion failed!");
-        }
+        assertNotNull(dimension.getDimensionName(), "Dimension name is null");
+        assertFalse(dimension.getDimensionName().isEmpty(), "Dimension name is empty");
     }
 
     private void particleTests() {
         Particle bukkitParticle = Particle.FIREWORK;
         ParticleType<?> peParticle = SpigotConversionUtil.fromBukkitParticle(bukkitParticle);
-        Particle convertedBack = (Particle) SpigotConversionUtil.toBukkitParticle(peParticle);
+        assertNotNull(peParticle, "ParticleType is null for " + bukkitParticle.name());
 
-        assertEquals(bukkitParticle, convertedBack);
+        Particle convertedBack = (Particle) SpigotConversionUtil.toBukkitParticle(peParticle);
+        assertNotNull(convertedBack, "Converted Particle is null for " + peParticle.getName());
+
+        assertEquals(bukkitParticle, convertedBack, "Mismatch in Particle for " + bukkitParticle.name());
     }
 }
