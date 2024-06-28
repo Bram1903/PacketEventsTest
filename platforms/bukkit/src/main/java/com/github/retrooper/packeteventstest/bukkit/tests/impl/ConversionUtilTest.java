@@ -118,25 +118,31 @@ public class ConversionUtilTest implements Tests {
     }
 
     private void entityTypeTests() {
-        EntityType bukkitEntityType = EntityType.PLAYER;
-        com.github.retrooper.packetevents.protocol.entity.type.EntityType peEntityType = SpigotConversionUtil.fromBukkitEntityType(bukkitEntityType);
-        assertNotNull(peEntityType, "EntityType is null for " + bukkitEntityType.name());
+        for (EntityType bukkitEntityType : EntityType.values()) {
+            if (bukkitEntityType == EntityType.UNKNOWN) continue;
 
-        EntityType convertedBack = SpigotConversionUtil.toBukkitEntityType(peEntityType);
-        assertNotNull(convertedBack, "Converted EntityType is null for " + peEntityType.getName());
+            com.github.retrooper.packetevents.protocol.entity.type.EntityType peEntityType = SpigotConversionUtil.fromBukkitEntityType(bukkitEntityType);
+            assertNotNull(peEntityType, "EntityType is null for " + bukkitEntityType.name());
 
-        assertEquals(bukkitEntityType, convertedBack, "Mismatch in EntityType for " + bukkitEntityType.name());
+            EntityType convertedBack = SpigotConversionUtil.toBukkitEntityType(peEntityType);
+            assertNotNull(convertedBack, "Converted EntityType is null for " + peEntityType.getName());
+
+            assertEquals(bukkitEntityType, convertedBack, "Mismatch in EntityType for " + bukkitEntityType.name());
+        }
     }
 
     private void itemMaterialTests() {
-        Material bukkitItemMaterial = Material.DIAMOND_SWORD;
-        ItemType itemType = SpigotConversionUtil.fromBukkitItemMaterial(bukkitItemMaterial);
-        assertNotNull(itemType, "ItemType is null for " + bukkitItemMaterial.name());
+        for (Material bukkitItemMaterial : Material.values()) {
+            if (!bukkitItemMaterial.isItem()) continue;
 
-        Material convertedBack = SpigotConversionUtil.toBukkitItemMaterial(itemType);
-        assertNotNull(convertedBack, "Converted Material is null for " + itemType.getName());
+            ItemType itemType = SpigotConversionUtil.fromBukkitItemMaterial(bukkitItemMaterial);
+            assertNotNull(itemType, "ItemType is null for " + bukkitItemMaterial.name());
 
-        assertEquals(bukkitItemMaterial, convertedBack, "Mismatch in Material for " + bukkitItemMaterial.name());
+            Material convertedBack = SpigotConversionUtil.toBukkitItemMaterial(itemType);
+            assertNotNull(convertedBack, "Converted Material is null for " + itemType.getName());
+
+            assertEquals(bukkitItemMaterial, convertedBack, "Mismatch in Material for " + bukkitItemMaterial.name());
+        }
     }
 
     private void materialDataTests() {
