@@ -18,8 +18,10 @@
 
 package com.github.retrooper.packeteventstest.bukkit.tests.impl;
 
+import com.github.retrooper.packetevents.protocol.entity.pose.EntityPose;
 import com.github.retrooper.packetevents.protocol.item.type.ItemType;
 import com.github.retrooper.packetevents.protocol.particle.type.ParticleType;
+import com.github.retrooper.packetevents.protocol.player.HumanoidArm;
 import com.github.retrooper.packetevents.protocol.potion.PotionType;
 import com.github.retrooper.packetevents.protocol.world.Dimension;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
@@ -28,7 +30,9 @@ import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Pose;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MainHand;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
@@ -55,7 +59,10 @@ public class ConversionUtilTest implements Tests {
                 this::materialDataTests,
                 this::itemStackTests,
                 this::worldTests,
-                this::particleTests
+                this::particleTests,
+                this::getEntityByIntIdTests,
+                this::poseTests,
+                this::handTests
         );
     }
 
@@ -193,6 +200,29 @@ public class ConversionUtilTest implements Tests {
             assertNotNull(convertedBack, "Converted Particle is null for " + peParticle.getName());
 
             assertEquals(bukkitParticle, convertedBack, "Mismatch in Particle for " + bukkitParticle.name());
+        }
+    }
+
+    private void getEntityByIntIdTests() {
+        //TODO: Implement
+    }
+
+    private void poseTests() {
+        for (Pose pose : Pose.values()) {
+            EntityPose pePose = SpigotConversionUtil.fromBukkitPose(pose);
+            assertNotNull(pePose, "Pose is null for " + pose.name());
+
+            Pose convertedBack = SpigotConversionUtil.toBukkitPose(pePose);
+            assertNotNull(convertedBack, "Converted Pose is null for " + pePose.name());
+
+            assertEquals(pose, convertedBack, "Mismatch in Pose for " + pose.name());
+        }
+    }
+
+    private void handTests() {
+        for (HumanoidArm arm : HumanoidArm.values()) {
+            MainHand mainHand = SpigotConversionUtil.toBukkitHand(arm);
+            assertNotNull(mainHand, "MainHand is null for " + arm.name());
         }
     }
 }
