@@ -49,7 +49,7 @@ public class ConversionUtilTest implements Tests {
                 this::locationTests,
                 this::potionEffectTypeTests,
                 this::gameModeTests,
-                this::bukkitBlockDataTests,
+                this::blockDataTests,
                 this::entityTypeTests,
                 this::itemMaterialTests,
                 this::materialDataTests,
@@ -100,12 +100,21 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void bukkitBlockDataTests() {
-        BlockData bukkitBlockData = Bukkit.createBlockData(Material.DIAMOND_BLOCK);
-        WrappedBlockState wrappedBlockState = SpigotConversionUtil.fromBukkitBlockData(bukkitBlockData);
-        BlockData convertedBackBukkitBlockData = SpigotConversionUtil.toBukkitBlockData(wrappedBlockState);
+    private void blockDataTests() {
+        for (Material material : Material.values()) {
+            if (!material.isBlock() || material.isLegacy()) continue;
 
-        assertEquals(bukkitBlockData, convertedBackBukkitBlockData);
+            BlockData bukkitBlockData = material.createBlockData();
+            if (bukkitBlockData == null) throw new AssertionError("BlockData is null for " + material.name());
+
+            WrappedBlockState wrappedBlockState = SpigotConversionUtil.fromBukkitBlockData(bukkitBlockData);
+            if (wrappedBlockState == null) throw new AssertionError("WrappedBlockState is null for " + bukkitBlockData.getMaterial().name());
+
+            BlockData convertedBackBukkitBlockData = SpigotConversionUtil.toBukkitBlockData(wrappedBlockState);
+            if (convertedBackBukkitBlockData == null) throw new AssertionError("BlockData is null for " + wrappedBlockState.getType().getName());
+
+            assertEquals(bukkitBlockData, convertedBackBukkitBlockData);
+        }
     }
 
     private void entityTypeTests() {
