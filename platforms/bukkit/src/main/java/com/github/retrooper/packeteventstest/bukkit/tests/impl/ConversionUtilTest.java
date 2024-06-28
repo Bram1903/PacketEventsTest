@@ -53,19 +53,19 @@ public class ConversionUtilTest implements Tests {
     public ConversionUtilTest(JavaPlugin plugin) {
         this.plugin = plugin;
         this.tasks = Arrays.asList(
-                this::locationTests,
-                this::potionEffectTypeTests,
-                this::gameModeTests,
-                this::blockDataTests,
-                this::entityTypeTests,
-                this::itemMaterialTests,
-                this::materialDataTests,
-                this::itemStackTests,
-                this::worldTests,
-                this::particleTests,
-                this::getEntityByIntIdTests,
-                this::poseTests,
-                this::handTests
+                this::locationTest,
+                this::potionEffectTypeTest,
+                this::gameModeTest,
+                this::blockDataTest,
+                this::entityTypeTest,
+                this::itemMaterialTest,
+                this::materialDataTest,
+                this::itemStackTest,
+                this::worldTest,
+                this::particleTest,
+                this::getEntityByIntIdTest,
+                this::poseTest,
+                this::handTest
         );
     }
 
@@ -76,7 +76,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void locationTests() {
+    private void locationTest() {
         World bukkitWorld = plugin.getServer().getWorlds().get(0);
         assertNotNull(bukkitWorld, "No worlds found that can be used for testing");
 
@@ -91,7 +91,7 @@ public class ConversionUtilTest implements Tests {
         assertEquals(bukkitLocation, convertedBackBukkitLocation, "Mismatch in Location conversion");
     }
 
-    private void potionEffectTypeTests() {
+    private void potionEffectTypeTest() {
         for (PotionEffectType bukkitPotionEffectType : Registry.POTION_EFFECT_TYPE) {
             PotionType potionType = SpigotConversionUtil.fromBukkitPotionEffectType(bukkitPotionEffectType);
             assertNotNull(potionType, "PotionType is null for " + bukkitPotionEffectType.getKey());
@@ -103,7 +103,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void gameModeTests() {
+    private void gameModeTest() {
         for (GameMode bukkitGameMode : GameMode.values()) {
             com.github.retrooper.packetevents.protocol.player.GameMode peGameMode = SpigotConversionUtil.fromBukkitGameMode(bukkitGameMode);
             assertNotNull(peGameMode, "GameMode is null for " + bukkitGameMode.name());
@@ -115,7 +115,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void blockDataTests() {
+    private void blockDataTest() {
         for (Material material : Material.values()) {
             if (!material.isBlock() || material.isLegacy()) continue;
 
@@ -132,7 +132,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void entityTypeTests() {
+    private void entityTypeTest() {
         for (EntityType bukkitEntityType : EntityType.values()) {
             if (bukkitEntityType == EntityType.UNKNOWN) continue;
 
@@ -146,7 +146,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void itemMaterialTests() {
+    private void itemMaterialTest() {
         for (Material bukkitItemMaterial : Material.values()) {
             if (!bukkitItemMaterial.isItem()) continue;
 
@@ -160,7 +160,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void materialDataTests() {
+    private void materialDataTest() {
         for (Material bukkitMaterial : Material.values()) {
             if (bukkitMaterial.isLegacy()) continue;
 
@@ -175,7 +175,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void itemStackTests() {
+    private void itemStackTest() {
         for (Material bukkitItemMaterial : Material.values()) {
             if (!bukkitItemMaterial.isItem()) continue;
 
@@ -190,7 +190,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void worldTests() {
+    private void worldTest() {
         World bukkitWorld = plugin.getServer().getWorlds().get(0);
         assertNotNull(bukkitWorld, "No worlds found that can be used for testing");
 
@@ -200,7 +200,7 @@ public class ConversionUtilTest implements Tests {
         assertNotNull(dimension.getDimensionName(), "Dimension name is null for " + bukkitWorld.getName());
     }
 
-    private void particleTests() {
+    private void particleTest() {
         for (Particle bukkitParticle : Particle.values()) {
             ParticleType<?> peParticle = SpigotConversionUtil.fromBukkitParticle(bukkitParticle);
             assertNotNull(peParticle, "ParticleType is null for " + bukkitParticle.name());
@@ -212,7 +212,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void getEntityByIntIdTests() {
+    private void getEntityByIntIdTest() {
         World world = Bukkit.getWorlds().get(0);
         assertNotNull(world, "No worlds found that can be used for testing");
 
@@ -239,7 +239,7 @@ public class ConversionUtilTest implements Tests {
         });
     }
 
-    private void poseTests() {
+    private void poseTest() {
         for (Pose pose : Pose.values()) {
             EntityPose pePose = SpigotConversionUtil.fromBukkitPose(pose);
             assertNotNull(pePose, "Pose is null for " + pose.name());
@@ -251,7 +251,7 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
-    private void handTests() {
+    private void handTest() {
         for (HumanoidArm arm : HumanoidArm.values()) {
             MainHand mainHand = SpigotConversionUtil.toBukkitHand(arm);
             assertNotNull(mainHand, "MainHand is null for " + arm.name());
