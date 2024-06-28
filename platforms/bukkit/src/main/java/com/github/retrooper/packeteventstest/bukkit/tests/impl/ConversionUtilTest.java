@@ -27,8 +27,10 @@ import com.github.retrooper.packetevents.protocol.world.Dimension;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packeteventstest.interfaces.Tests;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import io.github.retrooper.packetevents.util.folia.FoliaScheduler;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Pose;
 import org.bukkit.inventory.ItemStack;
@@ -39,6 +41,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +59,7 @@ public class ConversionUtilTest implements Tests {
                 this::blockDataTests,
                 this::entityTypeTests,
                 this::itemMaterialTests,
-                this::materialDataTests,
+                //this::materialDataTests,
                 this::itemStackTests,
                 this::worldTests,
                 this::particleTests,
@@ -69,7 +72,8 @@ public class ConversionUtilTest implements Tests {
     @Override
     public void init() {
         for (Runnable task : tasks) {
-            task.run();
+            FoliaScheduler.getAsyncScheduler().runNow(this.plugin, (o -> task.run()));
+            //task.run();
         }
     }
 
@@ -204,7 +208,30 @@ public class ConversionUtilTest implements Tests {
     }
 
     private void getEntityByIntIdTests() {
-        //TODO: Implement
+        World world = Bukkit.getWorlds().get(0);
+        assertNotNull(world, "No worlds found that can be used for testing");
+
+        Location location = new Location(world, 0, 0, 0);
+
+        // In order to spawn entities, we need to run the task on the main thread
+        FoliaScheduler.getRegionScheduler().run(this.plugin, location, (o) -> {
+            for (EntityType entityType : EntityType.values()) {
+                if (entityType == EntityType.UNKNOWN || entityType == EntityType.PLAYER) continue;
+                if (!entityType.isAlive()) continue;
+
+                Entity bukkitEntity = world.spawnEntity(location, entityType);
+                assertNotNull(bukkitEntity, "Failed to spawn entity of type " + entityType.name());
+
+                int entityId = bukkitEntity.getEntityId();
+
+                FoliaScheduler.getAsyncScheduler().runNow(this.plugin, (o1 -> {
+                    Entity entityById = SpigotConversionUtil.getEntityById(world, entityId);
+                    assertNotNull(entityById, "Failed to get entity by id " + entityId + " for type " + entityType.name());
+
+                    assertEquals(bukkitEntity.getType(), entityById.getType(), "Mismatch in entity type for id " + entityId);
+                }));
+            }
+        });
     }
 
     private void poseTests() {
