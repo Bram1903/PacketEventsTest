@@ -30,4 +30,9 @@ public class BungeePacketEventsTest extends PEPlatform<Plugin> {
     public BungeePacketEventsTest(Plugin plugin) {
         this.plugin = plugin;
     }
+
+    @Override
+    public Plugin getPlatform() {
+        return this.plugin;
+    }
 }

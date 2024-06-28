@@ -35,4 +35,9 @@ public class VelocityPacketEventsTest extends PEPlatform<ProxyServer> {
         this.proxy = proxy;
         this.dataDirectory = dataDirectory;
     }
+
+    @Override
+    public ProxyServer getPlatform() {
+        return this.proxy;
+    }
 }

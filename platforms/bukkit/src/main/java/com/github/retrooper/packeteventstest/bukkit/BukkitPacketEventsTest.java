@@ -36,4 +36,9 @@ public class BukkitPacketEventsTest extends PEPlatform<JavaPlugin> {
     protected void EnableTestManager() {
         testManager = new TestManager(this.plugin);
     }
+
+    @Override
+    public JavaPlugin getPlatform() {
+        return this.plugin;
+    }
 }

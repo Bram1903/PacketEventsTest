@@ -44,4 +44,6 @@ public abstract class PEPlatform<P> {
     public void commonOnDisable() {
         logManager.info("PacketEventsTest has been disabled!");
     }
+
+    public abstract P getPlatform();
 }

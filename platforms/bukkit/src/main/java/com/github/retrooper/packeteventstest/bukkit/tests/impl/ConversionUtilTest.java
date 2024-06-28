@@ -62,4 +62,3 @@ public class ConversionUtilTest implements Tests {
         }
     }
 }
-

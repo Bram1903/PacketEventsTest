@@ -22,6 +22,8 @@ import com.github.retrooper.packeteventstest.bukkit.tests.impl.ConversionUtilTes
 import com.github.retrooper.packeteventstest.interfaces.Tests;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.CompletableFuture;
+
 public class TestManager {
 
     public TestManager(JavaPlugin plugin) {
@@ -30,11 +32,20 @@ public class TestManager {
 
     private void registerTests(JavaPlugin plugin) {
         Tests[] tests = {
-            new ConversionUtilTest(plugin)
+                new ConversionUtilTest(plugin)
         };
 
         for (Tests test : tests) {
-            test.init();
+            CompletableFuture.runAsync(() -> {
+                try {
+                    test.init();
+                } catch (Exception e) {
+                    //noinspection CallToPrintStackTrace
+                    e.printStackTrace();
+                }
+            });
         }
     }
 }
+
+
