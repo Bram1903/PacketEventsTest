@@ -171,9 +171,6 @@ public class ConversionUtilTest implements Tests {
             MaterialData convertedMaterialData = SpigotConversionUtil.toBukkitMaterialData(wrappedBlockState);
             assertNotNull(convertedMaterialData, "Converted MaterialData is null for " + wrappedBlockState.getType().getName());
 
-            System.out.println("MaterialData: " + materialData.getItemType().name());
-            System.out.println("Converted MaterialData: " + convertedMaterialData.getItemType().name());
-
             assertEquals(materialData, convertedMaterialData, "Mismatch in MaterialData for " + materialData.getItemType().name());
         }
     }
