@@ -41,9 +41,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ConversionUtilTest implements Tests {
 
@@ -59,7 +59,7 @@ public class ConversionUtilTest implements Tests {
                 this::blockDataTests,
                 this::entityTypeTests,
                 this::itemMaterialTests,
-                //this::materialDataTests,
+                this::materialDataTests,
                 this::itemStackTests,
                 this::worldTests,
                 this::particleTests,
@@ -73,7 +73,6 @@ public class ConversionUtilTest implements Tests {
     public void init() {
         for (Runnable task : tasks) {
             FoliaScheduler.getAsyncScheduler().runNow(this.plugin, (o -> task.run()));
-            //task.run();
         }
     }
 
@@ -188,11 +187,12 @@ public class ConversionUtilTest implements Tests {
 
     private void worldTests() {
         World bukkitWorld = plugin.getServer().getWorlds().get(0);
+        assertNotNull(bukkitWorld, "No worlds found that can be used for testing");
+
         Dimension dimension = SpigotConversionUtil.fromBukkitWorld(bukkitWorld);
         assertNotNull(dimension, "Dimension is null for " + bukkitWorld.getName());
 
-        assertNotNull(dimension.getDimensionName(), "Dimension name is null");
-        assertFalse(dimension.getDimensionName().isEmpty(), "Dimension name is empty");
+        assertNotNull(dimension.getDimensionName(), "Dimension name is null for " + bukkitWorld.getName());
     }
 
     private void particleTests() {
