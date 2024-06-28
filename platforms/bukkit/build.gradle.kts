@@ -10,4 +10,5 @@ dependencies {
     implementation(project(":common"))
     compileOnly(libs.paper)
     compileOnly(libs.packetevents.spigot)
+    compileOnly(libs.bundles.junit)
 }

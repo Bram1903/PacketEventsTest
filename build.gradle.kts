@@ -25,6 +25,7 @@ tasks {
         archiveFileName = "${rootProject.name}-${project.version}.jar"
         archiveClassifier = null
 
+        relocate("org.junit.jupiter", "com.github.retrooper.packeteventstest.shaded")
         relocate(
             "net.kyori.adventure.text.serializer.gson",
             "io.github.retrooper.packetevents.adventure.serializer.gson"

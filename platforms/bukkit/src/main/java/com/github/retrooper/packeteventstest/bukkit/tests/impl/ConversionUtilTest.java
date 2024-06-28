@@ -36,6 +36,8 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ConversionUtilTest implements Tests {
 
     private final JavaPlugin plugin;
@@ -71,18 +73,18 @@ public class ConversionUtilTest implements Tests {
         com.github.retrooper.packetevents.protocol.world.Location peLocation = SpigotConversionUtil.fromBukkitLocation(bukkitLocation);
         Location convertedBackBukkitLocation = SpigotConversionUtil.toBukkitLocation(bukkitWorld, peLocation);
 
-        if (!bukkitLocation.equals(convertedBackBukkitLocation)) {
-            throw new AssertionError("Location conversion failed!");
-        }
+        assertEquals(bukkitLocation, convertedBackBukkitLocation);
     }
 
     private void potionEffectTypeTests() {
-        PotionEffectType bukkitPotionEffectType = PotionEffectType.ABSORPTION;
-        PotionType potionType = SpigotConversionUtil.fromBukkitPotionEffectType(bukkitPotionEffectType);
-        PotionEffectType convertedBackBukkitPotionEffectType = SpigotConversionUtil.toBukkitPotionEffectType(potionType);
+        for (PotionEffectType bukkitPotionEffectType : Registry.POTION_EFFECT_TYPE) {
+            PotionType potionType = SpigotConversionUtil.fromBukkitPotionEffectType(bukkitPotionEffectType);
+            if (potionType == null) throw new AssertionError("PotionType is null for " + bukkitPotionEffectType.getKey());
 
-        if (!bukkitPotionEffectType.equals(convertedBackBukkitPotionEffectType)) {
-            throw new AssertionError("PotionEffectType conversion failed!");
+            PotionEffectType convertedBackBukkitPotionEffectType = SpigotConversionUtil.toBukkitPotionEffectType(potionType);
+            if (convertedBackBukkitPotionEffectType == null) throw new AssertionError("PotionEffectType is null for " + potionType.getName());
+
+            assertEquals(bukkitPotionEffectType, convertedBackBukkitPotionEffectType);
         }
     }
 
@@ -91,9 +93,7 @@ public class ConversionUtilTest implements Tests {
         com.github.retrooper.packetevents.protocol.player.GameMode peGameMode = SpigotConversionUtil.fromBukkitGameMode(bukkitGameMode);
         GameMode convertedBack = SpigotConversionUtil.toBukkitGameMode(peGameMode);
 
-        if (!bukkitGameMode.equals(convertedBack)) {
-            throw new AssertionError("GameMode conversion failed!");
-        }
+        assertEquals(bukkitGameMode, convertedBack);
     }
 
     private void bukkitBlockDataTests() {
@@ -101,9 +101,7 @@ public class ConversionUtilTest implements Tests {
         WrappedBlockState wrappedBlockState = SpigotConversionUtil.fromBukkitBlockData(bukkitBlockData);
         BlockData convertedBackBukkitBlockData = SpigotConversionUtil.toBukkitBlockData(wrappedBlockState);
 
-        if (!bukkitBlockData.equals(convertedBackBukkitBlockData)) {
-            throw new AssertionError("BlockData conversion failed!");
-        }
+        assertEquals(bukkitBlockData, convertedBackBukkitBlockData);
     }
 
     private void entityTypeTests() {
@@ -111,9 +109,7 @@ public class ConversionUtilTest implements Tests {
         com.github.retrooper.packetevents.protocol.entity.type.EntityType peEntityType = SpigotConversionUtil.fromBukkitEntityType(bukkitEntityType);
         EntityType convertedBack = SpigotConversionUtil.toBukkitEntityType(peEntityType);
 
-        if (!bukkitEntityType.equals(convertedBack)) {
-            throw new AssertionError("EntityType conversion failed!");
-        }
+        assertEquals(bukkitEntityType, convertedBack);
     }
 
     private void itemMaterialTests() {
@@ -121,19 +117,15 @@ public class ConversionUtilTest implements Tests {
         ItemType itemType = SpigotConversionUtil.fromBukkitItemMaterial(bukkitItemMaterial);
         Material convertedBack = SpigotConversionUtil.toBukkitItemMaterial(itemType);
 
-        if (!bukkitItemMaterial.equals(convertedBack)) {
-            throw new AssertionError("Item material conversion failed!");
-        }
+        assertEquals(bukkitItemMaterial, convertedBack);
     }
 
     private void materialDataTests() {
-        MaterialData bukkitMaterialData = new MaterialData(Material.DIAMOND_SWORD);
+        MaterialData bukkitMaterialData = new MaterialData(Material.DIRT);
         WrappedBlockState peMaterialData = SpigotConversionUtil.fromBukkitMaterialData(bukkitMaterialData);
         MaterialData convertedBack = SpigotConversionUtil.toBukkitMaterialData(peMaterialData);
 
-        if (!bukkitMaterialData.equals(convertedBack)) {
-            throw new AssertionError("MaterialData conversion failed!");
-        }
+        assertEquals(bukkitMaterialData, convertedBack);
     }
 
     private void itemStackTests() {
@@ -141,9 +133,7 @@ public class ConversionUtilTest implements Tests {
         com.github.retrooper.packetevents.protocol.item.ItemStack peItemStack = SpigotConversionUtil.fromBukkitItemStack(bukkitItemStack);
         ItemStack convertedBackBukkitItemStack = SpigotConversionUtil.toBukkitItemStack(peItemStack);
 
-        if (!bukkitItemStack.equals(convertedBackBukkitItemStack)) {
-            throw new AssertionError("ItemStack conversion failed!");
-        }
+        assertEquals(bukkitItemStack, convertedBackBukkitItemStack);
     }
 
     private void worldTests() {
@@ -160,8 +150,6 @@ public class ConversionUtilTest implements Tests {
         ParticleType<?> peParticle = SpigotConversionUtil.fromBukkitParticle(bukkitParticle);
         Particle convertedBack = (Particle) SpigotConversionUtil.toBukkitParticle(peParticle);
 
-        if (!bukkitParticle.equals(convertedBack)) {
-            throw new AssertionError("Particle conversion failed!");
-        }
+        assertEquals(bukkitParticle, convertedBack);
     }
 }
