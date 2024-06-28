@@ -4,8 +4,6 @@ description: A simple plugin to test PacketEvents
 website: https://github.com/retrooper/packetevents
 main: com.github.retrooper.packeteventstest.bungee.PEBungee
 version: ${version}
-api-version: '1.13'
-folia-supported: true
-load: POSTWORLD
-depend:
+loadafter: AntiHealthIndicator
+depends:
   - packetevents
