@@ -89,11 +89,15 @@ public class ConversionUtilTest implements Tests {
     }
 
     private void gameModeTests() {
-        GameMode bukkitGameMode = GameMode.CREATIVE;
-        com.github.retrooper.packetevents.protocol.player.GameMode peGameMode = SpigotConversionUtil.fromBukkitGameMode(bukkitGameMode);
-        GameMode convertedBack = SpigotConversionUtil.toBukkitGameMode(peGameMode);
+        for (GameMode bukkitGameMode : GameMode.values()) {
+            com.github.retrooper.packetevents.protocol.player.GameMode peGameMode = SpigotConversionUtil.fromBukkitGameMode(bukkitGameMode);
+            if (peGameMode == null) throw new AssertionError("GameMode is null for " + bukkitGameMode.name());
 
-        assertEquals(bukkitGameMode, convertedBack);
+            GameMode convertedBack = SpigotConversionUtil.toBukkitGameMode(peGameMode);
+            if (convertedBack == null) throw new AssertionError("GameMode is null for " + peGameMode.name());
+
+            assertEquals(bukkitGameMode, convertedBack);
+        }
     }
 
     private void bukkitBlockDataTests() {
