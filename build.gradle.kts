@@ -26,6 +26,9 @@ tasks {
         archiveClassifier = null
 
         relocate("org.junit.jupiter", "com.github.retrooper.packeteventstest.shaded")
+        relocate("org.junit.platform", "com.github.retrooper.packeteventstest.shaded")
+        relocate("org.apiguardian.api", "com.github.retrooper.packeteventstest.shaded")
+        relocate("org.opentest4j", "com.github.retrooper.packeteventstest.shaded.opentest4j")
         relocate(
             "net.kyori.adventure.text.serializer.gson",
             "io.github.retrooper.packetevents.adventure.serializer.gson"
