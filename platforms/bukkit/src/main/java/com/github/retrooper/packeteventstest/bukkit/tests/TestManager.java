@@ -20,6 +20,7 @@ package com.github.retrooper.packeteventstest.bukkit.tests;
 
 import com.github.retrooper.packeteventstest.bukkit.tests.impl.ConversionUtilTest;
 import com.github.retrooper.packeteventstest.interfaces.Tests;
+import io.github.retrooper.packetevents.util.folia.FoliaScheduler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TestManager {
@@ -34,7 +35,7 @@ public class TestManager {
         };
 
         for (Tests test : tests) {
-            test.init();
+            FoliaScheduler.getAsyncScheduler().runNow(plugin, (o) -> test.init());
         }
     }
 }
