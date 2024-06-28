@@ -18,13 +18,20 @@
 
 package com.github.retrooper.packeteventstest.bukkit.tests.impl;
 
+import com.github.retrooper.packetevents.protocol.item.type.ItemType;
+import com.github.retrooper.packetevents.protocol.particle.type.ParticleType;
+import com.github.retrooper.packetevents.protocol.potion.PotionType;
+import com.github.retrooper.packetevents.protocol.world.Dimension;
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import com.github.retrooper.packeteventstest.interfaces.Tests;
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 
 public class ConversionUtilTest implements Tests {
 
@@ -37,7 +44,15 @@ public class ConversionUtilTest implements Tests {
     @Override
     public void init() {
         locationTests();
+        potionEffectTypeTests();
+        gameModeTests();
+        bukkitBlockDataTests();
+        entityTypeTests();
+        itemMaterialTests();
+        materialDataTests();
         itemStackTests();
+        worldTests();
+        particleTests();
     }
 
     private void locationTests() {
@@ -52,6 +67,66 @@ public class ConversionUtilTest implements Tests {
         }
     }
 
+    private void potionEffectTypeTests() {
+        PotionEffectType bukkitPotionEffectType = PotionEffectType.ABSORPTION;
+        PotionType potionType = SpigotConversionUtil.fromBukkitPotionEffectType(bukkitPotionEffectType);
+        PotionEffectType convertedBackBukkitPotionEffectType = SpigotConversionUtil.toBukkitPotionEffectType(potionType);
+
+        if (!bukkitPotionEffectType.equals(convertedBackBukkitPotionEffectType)) {
+            throw new AssertionError("PotionEffectType conversion failed!");
+        }
+    }
+
+    private void gameModeTests() {
+        GameMode bukkitGameMode = GameMode.CREATIVE;
+        com.github.retrooper.packetevents.protocol.player.GameMode peGameMode = SpigotConversionUtil.fromBukkitGameMode(bukkitGameMode);
+        GameMode convertedBack = SpigotConversionUtil.toBukkitGameMode(peGameMode);
+
+        if (!bukkitGameMode.equals(convertedBack)) {
+            throw new AssertionError("GameMode conversion failed!");
+        }
+    }
+
+    private void bukkitBlockDataTests() {
+        BlockData bukkitBlockData = Bukkit.createBlockData(Material.DIAMOND_BLOCK);
+        WrappedBlockState wrappedBlockState = SpigotConversionUtil.fromBukkitBlockData(bukkitBlockData);
+        BlockData convertedBackBukkitBlockData = SpigotConversionUtil.toBukkitBlockData(wrappedBlockState);
+
+        if (!bukkitBlockData.equals(convertedBackBukkitBlockData)) {
+            throw new AssertionError("BlockData conversion failed!");
+        }
+    }
+
+    private void entityTypeTests() {
+        EntityType bukkitEntityType = EntityType.PLAYER;
+        com.github.retrooper.packetevents.protocol.entity.type.EntityType peEntityType = SpigotConversionUtil.fromBukkitEntityType(bukkitEntityType);
+        EntityType convertedBack = SpigotConversionUtil.toBukkitEntityType(peEntityType);
+
+        if (!bukkitEntityType.equals(convertedBack)) {
+            throw new AssertionError("EntityType conversion failed!");
+        }
+    }
+
+    private void itemMaterialTests() {
+        Material bukkitItemMaterial = Material.DIAMOND_SWORD;
+        ItemType itemType = SpigotConversionUtil.fromBukkitItemMaterial(bukkitItemMaterial);
+        Material convertedBack = SpigotConversionUtil.toBukkitItemMaterial(itemType);
+
+        if (!bukkitItemMaterial.equals(convertedBack)) {
+            throw new AssertionError("Item material conversion failed!");
+        }
+    }
+
+    private void materialDataTests() {
+        MaterialData bukkitMaterialData = new MaterialData(Material.DIAMOND_SWORD);
+        WrappedBlockState peMaterialData = SpigotConversionUtil.fromBukkitMaterialData(bukkitMaterialData);
+        MaterialData convertedBack = SpigotConversionUtil.toBukkitMaterialData(peMaterialData);
+
+        if (!bukkitMaterialData.equals(convertedBack)) {
+            throw new AssertionError("MaterialData conversion failed!");
+        }
+    }
+
     private void itemStackTests() {
         ItemStack bukkitItemStack = new ItemStack(Material.DIAMOND_SWORD, 1);
         com.github.retrooper.packetevents.protocol.item.ItemStack peItemStack = SpigotConversionUtil.fromBukkitItemStack(bukkitItemStack);
@@ -59,6 +134,25 @@ public class ConversionUtilTest implements Tests {
 
         if (!bukkitItemStack.equals(convertedBackBukkitItemStack)) {
             throw new AssertionError("ItemStack conversion failed!");
+        }
+    }
+
+    private void worldTests() {
+        World bukkitWorld = plugin.getServer().getWorlds().get(0);
+        Dimension dimension = SpigotConversionUtil.fromBukkitWorld(bukkitWorld);
+
+        if (dimension.getDimensionName() == null || dimension.getDimensionName().isEmpty()) {
+            throw new AssertionError("World conversion failed!");
+        }
+    }
+
+    private void particleTests() {
+        Particle bukkitParticle = Particle.FIREWORK;
+        ParticleType<?> peParticle = SpigotConversionUtil.fromBukkitParticle(bukkitParticle);
+        Particle convertedBack = (Particle) SpigotConversionUtil.toBukkitParticle(peParticle);
+
+        if (!bukkitParticle.equals(convertedBack)) {
+            throw new AssertionError("Particle conversion failed!");
         }
     }
 }
