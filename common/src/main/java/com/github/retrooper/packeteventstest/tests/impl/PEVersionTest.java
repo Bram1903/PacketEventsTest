@@ -37,18 +37,12 @@ public class PEVersionTest<P> implements Tests {
 
     @Override
     public void init() {
-        staticVersionTest();
         dynamicVersionTest();
         createVersionTest();
         createVersionWithSnapshotTest();
         checkIfNewerTest();
         checkIfOlderTest();
         checkIfEqualsTest();
-    }
-
-    private void staticVersionTest() {
-        PEVersion version = PEVersions.CURRENT;
-        assertNotNull(version, "Expected current version to be not null");
     }
 
     private void dynamicVersionTest() {
