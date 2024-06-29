@@ -21,12 +21,14 @@ package com.github.retrooper.packeteventstest;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packeteventstest.listeners.CommonPacketListener;
 import com.github.retrooper.packeteventstest.managers.LogManager;
+import com.github.retrooper.packeteventstest.tests.TestManager;
 import lombok.Getter;
 
 @Getter
 public abstract class PEPlatform<P> {
 
     protected LogManager logManager;
+    private TestManager<P> testManager;
 
     /**
      * Called when the platform is enabled.
@@ -34,6 +36,7 @@ public abstract class PEPlatform<P> {
     public void commonOnEnable() {
         logManager = new LogManager();
         PacketEvents.getAPI().getEventManager().registerListener(new CommonPacketListener());
+        testManager = new TestManager<>(this);
 
         logManager.sendPluginWarning();
     }
